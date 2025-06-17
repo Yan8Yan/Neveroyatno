@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Neveroyatno.Models.Lecture>
 
-<h2>Мои лекции</h2>
+<h2>Лекции</h2>
 
 <table class="table">
     <thead>
@@ -17,15 +17,25 @@
                 <td>@lecture.Title</td>
                 <td>@lecture.Content</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@lecture.Id">Редактировать</a> |
-                    <a asp-action="Details" asp-route-id="@lecture.Id">Просмотр</a> |
-                    <a asp-action="Delete" asp-route-id="@lecture.Id">Удалить</a>
+                    <a asp-action="Details" asp-route-id="@lecture.Id">Просмотр</a>
+                    @if (User.IsInRole("Преподаватель"))
+                    {
+                        <text>
+                            |
+                            <a asp-action="Edit" asp-route-id="@lecture.Id">Редактировать</a>
+                            |
+                            <a asp-action="Delete" asp-route-id="@lecture.Id">Удалить</a>
+                        </text>
+                    }
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Добавить новую лекцию</a>
-</p>
+@if (User.IsInRole("Преподаватель"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Добавить новую лекцию</a>
+    </p>
+}

@@ -7,7 +7,6 @@ using Neveroyatno.Models;
 
 namespace Neveroyatno.Controllers
 {
-    [Authorize(Roles = "Преподаватель")]
     public class LectureController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,15 +21,27 @@ namespace Neveroyatno.Controllers
         {
             return View();
         }
+        [Authorize(Roles = "Преподаватель,Студент")]
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-            var lectures = await _context.Lectures
-                .Where(l => l.AuthorId == user.Id) 
-                .ToListAsync();
+            List<Lecture> lectures;
+
+            if (await _userManager.IsInRoleAsync(user, "Преподаватель"))
+            {
+                lectures = await _context.Lectures
+                    .Where(l => l.AuthorId == user.Id)
+                    .ToListAsync();
+            }
+            else
+            {
+                lectures = await _context.Lectures
+                    .ToListAsync();
+            }
 
             return View(lectures);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -62,6 +73,8 @@ namespace Neveroyatno.Controllers
 
             return View(lecture);
         }
+
+        [Authorize(Roles = "Преподаватель")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,6 +89,7 @@ namespace Neveroyatno.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Преподаватель")]
         public async Task<IActionResult> Edit(int id, Lecture lecture)
         {
             if (id != lecture.Id)
@@ -107,6 +121,8 @@ namespace Neveroyatno.Controllers
             }
             return View(lecture);
         }
+
+        [Authorize(Roles = "Преподаватель")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

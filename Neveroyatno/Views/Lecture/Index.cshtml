@@ -6,7 +6,6 @@
     <thead>
         <tr>
             <th>Название</th>
-            <th>Содержание</th>
             <th></th>
         </tr>
     </thead>
@@ -15,7 +14,6 @@
         {
             <tr>
                 <td>@lecture.Title</td>
-                <td>@lecture.Content</td>
                 <td>
                     <a asp-action="Details" asp-route-id="@lecture.Id">Просмотр</a>
                     @if (User.IsInRole("Преподаватель"))

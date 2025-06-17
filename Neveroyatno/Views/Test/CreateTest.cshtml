@@ -1,0 +1,69 @@
+﻿@model Neveroyatno.Models.Test
+
+@{
+    ViewData["Title"] = "Создать тест";
+}
+
+<h2>Создание теста для лекции @Model.LectureId</h2>
+
+<form method="post">
+    <!-- Остальная часть формы -->
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" required />
+    </div>
+
+    <input type="hidden" asp-for="LectureId" />
+
+    <div id="questions-container">
+        <!-- Вопросы будут добавляться сюда -->
+    </div>
+
+    <button type="button" class="btn btn-secondary" id="add-question">Добавить вопрос</button>
+    <button type="submit" class="btn btn-primary">Создать тест</button>
+</form>
+
+<!-- Место для добавления JavaScript -->
+@section Scripts {
+    <script>
+        // Обработчик для кнопки добавления вопроса
+        document.getElementById('add-question').addEventListener('click', function() {
+            const container = document.getElementById('questions-container');
+            const index = container.children.length;
+
+            const newQuestion = document.createElement('div');
+            newQuestion.className = 'question';
+            newQuestion.innerHTML = `
+                <div class="form-group">
+                    <label>Тип вопроса</label>
+                    <select name="Tasks[${index}].Question.Type" class="form-control" required>
+                        <option value="0">Открытый вопрос</option>
+                        <option value="1">Один вариант</option>
+                        <option value="2">Несколько вариантов</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Текст вопроса</label>
+                    <input name="Tasks[${index}].Question.Text" class="form-control" required />
+                </div>
+                ${Array(4).fill().map((_, i) => `
+                    <div class="form-group">
+                        <label>Ответ ${i+1}</label>
+                        <input name="Tasks[${index}].Question.Answers[${i}].Text" class="form-control" required />
+                        <label>
+                            <input type="checkbox" name="Tasks[${index}].Question.Answers[${i}].IsCorrect" value="true" />
+                            Правильный ответ
+                        </label>
+                    </div>
+                `).join('')}
+                <hr> <!-- Разделитель между вопросами -->
+            `;
+
+            container.appendChild(newQuestion);
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('add-question').click();
+        });
+    </script>
+}

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Neveroyatno.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Neveroyatno.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250617201549_FixTaskItemQuestionRelation")]
+    partial class FixTaskItemQuestionRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -169,7 +172,7 @@ namespace Neveroyatno.Migrations
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("boolean");
 
-                    b.Property<int?>("QuestionId")
+                    b.Property<int>("QuestionId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Text")
@@ -276,10 +279,7 @@ namespace Neveroyatno.Migrations
             modelBuilder.Entity("Neveroyatno.Models.Question", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -308,8 +308,6 @@ namespace Neveroyatno.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
 
                     b.HasIndex("TestId");
 
@@ -394,7 +392,9 @@ namespace Neveroyatno.Migrations
                 {
                     b.HasOne("Neveroyatno.Models.Question", "Question")
                         .WithMany("Answers")
-                        .HasForeignKey("QuestionId");
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Question");
                 });
@@ -409,21 +409,22 @@ namespace Neveroyatno.Migrations
                     b.Navigation("Author");
                 });
 
-            modelBuilder.Entity("Neveroyatno.Models.TaskItem", b =>
+            modelBuilder.Entity("Neveroyatno.Models.Question", b =>
                 {
-                    b.HasOne("Neveroyatno.Models.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
+                    b.HasOne("Neveroyatno.Models.TaskItem", null)
+                        .WithOne("Question")
+                        .HasForeignKey("Neveroyatno.Models.Question", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
+            modelBuilder.Entity("Neveroyatno.Models.TaskItem", b =>
+                {
                     b.HasOne("Neveroyatno.Models.Test", "Test")
                         .WithMany("Tasks")
                         .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Question");
 
                     b.Navigation("Test");
                 });
@@ -447,6 +448,12 @@ namespace Neveroyatno.Migrations
             modelBuilder.Entity("Neveroyatno.Models.Question", b =>
                 {
                     b.Navigation("Answers");
+                });
+
+            modelBuilder.Entity("Neveroyatno.Models.TaskItem", b =>
+                {
+                    b.Navigation("Question")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Neveroyatno.Models.Test", b =>

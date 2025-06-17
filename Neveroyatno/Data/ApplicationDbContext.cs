@@ -12,7 +12,7 @@ namespace Neveroyatno.Data
 
         public DbSet<Lecture> Lectures { get; set; }
         public DbSet<Test> Tests { get; set; }
-        public DbSet<TaskItem> Tasks { get; set; }
+        public DbSet<TaskItem> TaskItems { get; set; }  
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
 
@@ -33,11 +33,6 @@ namespace Neveroyatno.Data
                 .WithOne(tsk => tsk.Test)
                 .HasForeignKey(tsk => tsk.TestId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<TaskItem>()
-                .HasOne(t => t.Question)
-                .WithOne()
-                .HasForeignKey<Question>(q => q.Id);
 
             modelBuilder.Entity<Lecture>()
                 .HasOne(l => l.Author)

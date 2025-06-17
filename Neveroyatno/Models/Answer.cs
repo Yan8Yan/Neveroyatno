@@ -1,4 +1,6 @@
-﻿namespace Neveroyatno.Models
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+
+namespace Neveroyatno.Models
 {
     public class Answer
     {
@@ -6,7 +8,9 @@
         public string Text { get; set; }
         public bool IsCorrect { get; set; }
 
-        public int QuestionId { get; set; }
-        public virtual Question Question { get; set; }
+        public int? QuestionId { get; set; }
+
+        [ValidateNever]
+        public virtual Question? Question { get; set; }
     }
 }

@@ -82,27 +82,60 @@ namespace Neveroyatno.Controllers
 
         // Обработка ответа
         [HttpPost]
-        public async Task<IActionResult> SubmitTest(int testId, List<Answer> answers)
+        public async Task<IActionResult> SubmitTest(int testId, List<UserAnswerDto> userAnswers)
         {
             var test = await _context.Tests
                 .Include(t => t.Tasks)
                 .ThenInclude(t => t.Question)
+                .ThenInclude(q => q.Answers)
                 .FirstOrDefaultAsync(t => t.Id == testId);
 
             if (test == null)
-            {
                 return NotFound();
+
+            int totalQuestions = test.Tasks.Count;
+            int correctCount = 0;
+
+            foreach (var task in test.Tasks)
+            {
+                var userAnswer = userAnswers.FirstOrDefault(ua => ua.TaskId == task.Id);
+                if (userAnswer == null)
+                    continue;
+
+                var question = task.Question;
+
+                switch (question.Type)
+                {
+                    case QuestionType.OpenText:
+                        // Например, проверять на точное совпадение, либо оставить ручную проверку
+                        // Здесь просто считаем правильным, если есть ответ
+                        if (!string.IsNullOrEmpty(userAnswer.OpenTextAnswer))
+                            correctCount++;
+                        break;
+
+                    case QuestionType.SingleChoice:
+                        var correctAnswer = question.Answers.FirstOrDefault(a => a.IsCorrect);
+                        if (correctAnswer != null && userAnswer.SelectedAnswerIds.Contains(correctAnswer.Id))
+                            correctCount++;
+                        break;
+
+                    case QuestionType.MultipleChoice:
+                        var correctAnswersIds = question.Answers.Where(a => a.IsCorrect).Select(a => a.Id).ToList();
+
+                        if (userAnswer.SelectedAnswerIds.Count == correctAnswersIds.Count &&
+                            !userAnswer.SelectedAnswerIds.Except(correctAnswersIds).Any())
+                        {
+                            correctCount++;
+                        }
+                        break;
+                }
             }
 
-            // Логика проверки ответов
-            var correctAnswers = answers.Where(a => a.IsCorrect).ToList();
-            var userAnswers = _context.Answers.Where(a => a.QuestionId == correctAnswers.First().QuestionId).ToList();
+            ViewBag.Score = correctCount;
+            ViewBag.TotalQuestions = totalQuestions;
 
-            // Пример оценки
-            var score = userAnswers.Count(a => a.IsCorrect == true);
-            ViewBag.Score = score;
-
-            return View("Result", new { Score = score });
+            return View("Result", test);
         }
+
     }
 }

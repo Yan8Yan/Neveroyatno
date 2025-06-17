@@ -22,7 +22,9 @@
     <p>
         @if (User.IsInRole("Студент"))
         {
-            <a asp-action="TakeTest" asp-route-testId="@Model.Test.Id">Пройти тест: @Model.Test.Name</a>
+            <a asp-controller="Test" asp-action="TakeTest" asp-route-testId="@Model.Test.Id">
+                Пройти тест: @Model.Test.Name
+            </a>
         }
         else if (User.IsInRole("Преподаватель"))
         {

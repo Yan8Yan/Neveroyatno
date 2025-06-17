@@ -1,9 +1,7 @@
-﻿@{
-    ViewData["Title"] = "Результаты теста";
-}
+﻿@model Neveroyatno.Models.Test
 
 <h2>Результаты теста</h2>
 
-<p>Вы набрали @ViewBag.Score правильных ответов из @Model.TotalQuestions.</p>
+<p>Вы набрали @ViewBag.Score правильных ответов из @ViewBag.TotalQuestions.</p>
 
 <a href="@Url.Action("Index", "Lecture")">Вернуться к лекциям</a>

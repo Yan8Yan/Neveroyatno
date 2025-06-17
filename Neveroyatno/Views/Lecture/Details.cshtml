@@ -10,9 +10,31 @@
 <p>
     @if (User.IsInRole("Преподаватель"))
     {
-        <a asp-action="Edit" asp-route-id="@Model.Id">Редактировать</a>
+        <a asp-controller="Test" asp-action="CreateTest" asp-route-lectureId="@Model.Id">Создать тест</a>
         <text> | </text>
     }
+</p>
 
+<h3>Тест для этой лекции</h3>
+
+@if (Model.Test != null)
+{
+    <p>
+        @if (User.IsInRole("Студент"))
+        {
+            <a asp-action="TakeTest" asp-route-testId="@Model.Test.Id">Пройти тест: @Model.Test.Name</a>
+        }
+        else if (User.IsInRole("Преподаватель"))
+        {
+            <a asp-action="AddQuestions" asp-route-testId="@Model.Test.Id">Редактировать тест: @Model.Test.Name</a>
+        }
+    </p>
+}
+else
+{
+    <p>Для этой лекции еще нет теста.</p>
+}
+
+<p>
     <a asp-action="Index">Назад к списку</a>
 </p>

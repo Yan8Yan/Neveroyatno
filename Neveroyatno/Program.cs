@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Neveroyatno.Data;
 using Neveroyatno.Models;
+using System.Configuration;
 
 namespace Neveroyatno
 {
@@ -20,8 +21,9 @@ namespace Neveroyatno
             .AddRoles<IdentityRole>() 
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
+
             builder.Services.AddControllersWithViews();
-            builder.Services.AddRazorPages(); 
+            builder.Services.AddRazorPages();
 
             var app = builder.Build();
 
@@ -53,6 +55,8 @@ namespace Neveroyatno
             app.MapRazorPages();
 
             app.Run();
+
+
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Neveroyatno
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -24,6 +24,12 @@ namespace Neveroyatno
             builder.Services.AddRazorPages(); 
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                await RoleInitializer.InitializeAsync(services);
+            }
 
             if (!app.Environment.IsDevelopment())
             {

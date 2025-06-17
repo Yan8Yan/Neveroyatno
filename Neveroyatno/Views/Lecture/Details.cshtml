@@ -40,3 +40,13 @@ else
 <p>
     <a asp-action="Index">Назад к списку</a>
 </p>
+
+@section Scripts {
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+}

@@ -1,15 +1,9 @@
 ﻿@page
 @model RegisterModel
-@{
-    ViewData["Title"] = "Регистрация";
-}
-
-<h1>@ViewData["Title"]</h1>
-
-<div class="row">
-    <div class="col-md-4">
+<div class="account-box">
+    <section>
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Создайте новую учётную запись</h2>
+            <h2 class="text-center">Регистрация</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 
@@ -32,44 +26,16 @@
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="Input.Role">Роль</label>
+                <label asp-for="Input.Role" class="form-label">Роль</label>
                 <select asp-for="Input.Role" asp-items="Model.Roles" class="form-control"></select>
                 <span asp-validation-for="Input.Role" class="text-danger"></span>
             </div>
 
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Зарегистрироваться</button>
         </form>
-    </div>
 
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Используйте другой способ регистрации</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            Внешние службы аутентификации не настроены. Подробнее см. <a href="https://go.microsoft.com/fwlink/?LinkID=532715">в этой статье</a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Войти с помощью @provider.DisplayName">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
-    </div>
+        
+    </section>
 </div>
 
 @section Scripts {

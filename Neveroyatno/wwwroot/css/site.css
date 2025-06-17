@@ -20,3 +20,63 @@ html {
 body {
   margin-bottom: 60px;
 }
+/* Центровка и ограничение ширины */
+.account-box {
+    max-width: 400px;
+    margin: 60px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
+}
+
+#login-submit {
+    background-color: #0a7f79;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 12px;
+    transition: background-color 0.2s ease;
+}
+
+    #login-submit:hover {
+        background-color: #08625e;
+    }
+
+.account-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+}
+
+#registerSubmit {
+    background-color: #0d8272; /* насыщенный зелёно-бирюзовый */
+    color: #fff;
+    font-weight: 600;
+    font-size: 18px;
+    padding: 12px 0;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+    #registerSubmit:hover {
+        background-color: #0a6e60;
+    }
+
+
+.auth-links a {
+    display: block;
+    text-align: center;
+    color: #0d6efd;
+    font-size: 14px;
+    margin-top: 10px;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+}
+
+    .auth-links a:hover {
+        color: #084298;
+        text-decoration: underline;
+    }

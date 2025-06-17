@@ -1,0 +1,16 @@
+﻿@using Neveroyatno.ViewModels
+@model ExamResultSummaryViewModel
+
+<h2>Результат</h2>
+<p>Правильных ответов: @Model.Score из @Model.Total</p>
+<p>Процент: @Model.Percentage %</p>
+
+@if (Model.CertificateName != null)
+{
+    <p>Поздравляем! Вы прошли тест.</p>
+    <a href="@Url.Action("DownloadCertificate", "Exam", new { fileName = Model.CertificateName })" target="_blank">Скачать сертификат</a>
+}
+else
+{
+    <p>К сожалению, вы не прошли тест. Вы разочаровали Дубровина, отправляйтесь на доп.сессию.</p>
+}

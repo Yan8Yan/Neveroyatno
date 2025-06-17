@@ -1,0 +1,13 @@
+﻿@model Neveroyatno.Models.Lecture
+
+<h2>Детали лекции</h2>
+
+<div>
+    <h4>@Model.Title</h4>
+    <p>@Model.Content</p>
+</div>
+
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Редактировать</a> |
+    <a asp-action="Index">Назад к списку</a>
+</p>

@@ -24,9 +24,9 @@ namespace Neveroyatno.Data
 
             modelBuilder.Entity<Lecture>()
                 .HasOne(l => l.Test)
-            .WithOne(t => t.Lecture)
+                .WithOne(t => t.Lecture)
                 .HasForeignKey<Test>(t => t.LectureId)
-            .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Test>()
                 .HasMany(t => t.Tasks)
@@ -39,7 +39,13 @@ namespace Neveroyatno.Data
                 .WithOne()
                 .HasForeignKey<Question>(q => q.Id);
 
+            modelBuilder.Entity<Lecture>()
+                .HasOne(l => l.Author)
+                .WithMany()
+                .HasForeignKey(l => l.AuthorId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
+
     }
 }
 

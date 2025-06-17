@@ -4,7 +4,7 @@
 
 <div>
     <h4>@Model.Title</h4>
-    <p>@Model.Content</p>
+    <p>@Html.Raw(Model.Content)</p>
 </div>
 
 <p>
@@ -13,6 +13,15 @@
         <a asp-action="Edit" asp-route-id="@Model.Id">Редактировать</a>
         <text> | </text>
     }
-
     <a asp-action="Index">Назад к списку</a>
 </p>
+
+@section Scripts {
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+}

@@ -2,6 +2,37 @@
 
 <h2>Результаты экзаменов</h2>
 
+<form method="get" class="mb-4 row g-3 align-items-end">
+    <div class="col-auto">
+        <label for="fullName" class="form-label">ФИО пользователя</label>
+        <input type="text" name="fullName" id="fullName" class="form-control" value="@ViewBag.FullNameFilter" placeholder="ФИО пользователя" />
+    </div>
+
+    <div class="col-auto">
+        <label for="lectureTitle" class="form-label">Лекция</label>
+        <input type="text" name="lectureTitle" id="lectureTitle" class="form-control" value="@ViewBag.LectureTitleFilter" placeholder="Название лекции" />
+    </div>
+
+    <div class="col-auto">
+        <label for="dateFrom" class="form-label">Дата с</label>
+        <input type="date" name="dateFrom" id="dateFrom" class="form-control" value="@ViewBag.DateFromFilter" />
+    </div>
+
+    <div class="col-auto">
+        <label for="dateTo" class="form-label">Дата по</label>
+        <input type="date" name="dateTo" id="dateTo" class="form-control" value="@ViewBag.DateToFilter" />
+    </div>
+
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Фильтровать</button>
+    </div>
+
+    <div class="col-auto">
+        <a asp-action="Index" class="btn btn-secondary">Сбросить</a>
+    </div>
+</form>
+
+
 <table class="table table-striped">
     <thead>
         <tr>

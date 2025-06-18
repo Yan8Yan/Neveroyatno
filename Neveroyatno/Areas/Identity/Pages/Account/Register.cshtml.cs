@@ -52,6 +52,15 @@ namespace Neveroyatno.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+
+            [Required(ErrorMessage = "Поле Имя Пользователя обязательно для заполнения.")]
+            [Display(Name = "Имя пользователя")]
+            public string UserName { get; set; }
+
+            [Required(ErrorMessage = "Поле ФИО обязательно для заполнения.")]
+            [Display(Name = "ФИО")]
+            public string FullName { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -102,6 +111,7 @@ namespace Neveroyatno.Areas.Identity.Pages.Account
                 
                 var user = CreateUser();
 
+                user.FullName = Input.FullName;
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);

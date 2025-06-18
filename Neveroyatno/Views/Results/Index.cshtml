@@ -18,7 +18,10 @@
         @foreach (var result in Model)
         {
             <tr>
-                <td>@result.User.UserName</td>
+                <td>
+                    @(string.IsNullOrEmpty(result.User.FullName) ? result.User.UserName : result.User.FullName)
+                    (@result.User.UserName)
+                </td>
                 <td>@result.Test.Name</td>
                 <td>@result.Test.Lecture?.Title</td>
                 <td>@result.Score</td>

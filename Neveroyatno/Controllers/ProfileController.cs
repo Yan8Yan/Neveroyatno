@@ -36,6 +36,7 @@ public class ProfileController : Controller
         var model = new UserProfileViewModel
         {
             UserName = user.UserName,
+            FullName = user.FullName,
             Email = user.Email,
             CompletedTests = completedTests,
             TotalTests = totalTests,

@@ -7,6 +7,7 @@ namespace Neveroyatno.ViewModels
         public string UserName { get; set; }
         public string Email { get; set; }
 
+        public string FullName { get; set; }
         public int CompletedTests { get; set; }
         public int TotalTests { get; set; }
 

@@ -1,44 +1,83 @@
 ﻿@model Neveroyatno.ViewModels.UserProfileViewModel
 
-<h2>Профиль: @Model.FullName (@Model.UserName)</h2>
-<p>Email: @Model.Email</p>
+@{
+    ViewData["Title"] = "Профиль пользователя";
+    var progress = 100 * Model.CompletedTests / (Model.TotalTests == 0 ? 1 : Model.TotalTests);
+}
 
-<hr />
-<h4>Прогресс обучения</h4>
-<p>Пройдено тестов: @Model.CompletedTests из @Model.TotalTests</p>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title">@Model.FullName</h4>
+                    <h6 class="text-muted">@Model.UserName</h6>
+                    <hr />
+                    <p><strong>Email:</strong> @Model.Email</p>
+                </div>
+            </div>
+        </div>
 
-<div class="progress mb-4">
-    <div class="progress-bar" role="progressbar"
-         style="width: @(100 * Model.CompletedTests / (Model.TotalTests == 0 ? 1 : Model.TotalTests))%">
-        @(100 * Model.CompletedTests / (Model.TotalTests == 0 ? 1 : Model.TotalTests))%
+        <div class="col-md-8">
+            @if (User.IsInRole("Студент"))
+            {
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title">Прогресс обучения</h4>
+                        <p class="mb-2">
+                            Пройдено тестов: <strong>@Model.CompletedTests</strong> из <strong>@Model.TotalTests</strong>
+                        </p>
+
+                        <div class="progress">
+                            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated"
+                                 role="progressbar"
+                                 style="width: @progress%"
+                                 aria-valuenow="@progress"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">
+                                @progress%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title mb-3">Результаты тестов</h4>
+
+                        @if (!Model.Results.Any())
+                        {
+                            <p class="text-muted">Вы ещё не проходили тесты.</p>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Лекция</th>
+                                            <th>Тест</th>
+                                            <th>Дата</th>
+                                            <th>Результат</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var r in Model.Results)
+                                        {
+                                            <tr>
+                                                <td>@r.Test?.Lecture?.Title</td>
+                                                <td>@r.Test?.Name</td>
+                                                <td>@r.PassedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                                                <td>@r.Percentage %</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 </div>
-
-@if (!Model.Results.Any())
-{
-    <p>Вы ещё не проходили тесты.</p>
-}
-else
-{
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Лекция</th>
-                <th>Тест</th>
-                <th>Дата</th>
-                <th>Результат</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var r in Model.Results)
-            {
-                <tr>
-                    <td>@r.Test?.Lecture?.Title</td>
-                    <td>@r.Test?.Name</td>
-                    <td>@r.PassedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
-                    <td>@r.Percentage %</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}

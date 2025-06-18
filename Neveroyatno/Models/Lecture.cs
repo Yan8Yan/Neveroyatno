@@ -8,6 +8,7 @@ namespace Neveroyatno.Models
         public string Title { get; set; }
         public string Content { get; set; }
         public string? AuthorId { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
         [ValidateNever]
         public virtual ApplicationUser Author { get; set; }

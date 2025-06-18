@@ -66,7 +66,11 @@ namespace Neveroyatno.Controllers
                 return NotFound();
 
             var lecture = await _context.Lectures
-                 .Include(l => l.Test)
+                .Include(l => l.Test)
+                .Include(l => l.Comments)
+                    .ThenInclude(c => c.User)
+                .Include(l => l.Comments)
+                    .ThenInclude(c => c.Replies)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (lecture == null)

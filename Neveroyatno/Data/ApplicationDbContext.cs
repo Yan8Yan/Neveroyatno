@@ -11,6 +11,7 @@ namespace Neveroyatno.Data
             : base(options) { }
 
         public DbSet<Lecture> Lectures { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         public DbSet<Test> Tests { get; set; }
         public DbSet<TaskItem> TaskItems { get; set; }  
         public DbSet<Question> Questions { get; set; }
@@ -40,6 +41,25 @@ namespace Neveroyatno.Data
                 .WithMany()
                 .HasForeignKey(l => l.AuthorId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Comment>()
+    .HasOne(c => c.Lecture)
+    .WithMany(l => l.Comments)
+    .HasForeignKey(c => c.LectureId)
+    .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.User)
+                .WithMany()
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.ParentComment)
+                .WithMany(c => c.Replies)
+                .HasForeignKey(c => c.ParentCommentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
 
     }

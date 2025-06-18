@@ -2,7 +2,45 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div class="probability-intro mt-4">
+    <h2>Основы теории вероятностей</h2>
+    <p>Теория вероятностей — это раздел математики, изучающий случайные события и закономерности, возникающие в результате их случайного характера.</p>
+    <ul>
+        <li><strong>Событие:</strong> результат эксперимента, который может произойти.</li>
+        <li><strong>Вероятность события:</strong> числовая мера шанса наступления события (от 0 до 1).</li>
+        <li><strong>Независимые события:</strong> события, не влияющие друг на друга.</li>
+    </ul>
 </div>
+
+<div class="probability-calculator mt-4">
+    <h3>Калькулятор вероятности</h3>
+    <form id="probForm">
+        <label>
+            Число благоприятных исходов:
+            <input type="number" id="favorable" min="0" required />
+        </label>
+        <br />
+        <label>
+            Общее число исходов:
+            <input type="number" id="total" min="1" required />
+        </label>
+        <br />
+        <button type="submit">Посчитать вероятность</button>
+    </form>
+    <p id="result" style="margin-top:10px;"></p>
+</div>
+
+<script>
+    document.getElementById('probForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const favorable = Number(document.getElementById('favorable').value);
+        const total = Number(document.getElementById('total').value);
+        if (favorable > total) {
+            document.getElementById('result').textContent = 'Благоприятных исходов не может быть больше общего числа.';
+            return;
+        }
+        const probability = favorable / total;
+        document.getElementById('result').textContent = `Вероятность: ${(probability * 100).toFixed(2)}%`;
+    });
+</script>

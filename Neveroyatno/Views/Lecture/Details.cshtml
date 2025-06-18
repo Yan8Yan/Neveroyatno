@@ -1,5 +1,8 @@
 ﻿@model Neveroyatno.Models.Lecture
 
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
 <h2>Детали лекции</h2>
 
 <div>
@@ -40,6 +43,52 @@ else
 <p>
     <a asp-action="Index">Назад к списку</a>
 </p>
+
+<hr />
+
+<h3>Комментарии</h3>
+
+<!-- Форма добавления комментария -->
+<form asp-controller="Comment" asp-action="Add" method="post">
+    <input type="hidden" name="lectureId" value="@Model.Id" />
+    <textarea name="content" class="form-control" placeholder="Оставить комментарий..." required></textarea>
+    <button type="submit" class="btn btn-primary mt-2">Отправить</button>
+</form>
+
+<hr />
+
+<!-- Вывод комментариев -->
+@foreach (var comment in Model.Comments
+    .Where(c => c.ParentCommentId == null)
+    .OrderByDescending(c => c.CreatedAt))
+{
+    <div class="border rounded p-2 my-3">
+        <strong>@comment.User.FullName</strong>
+        (<em>@(await UserManager.IsInRoleAsync(comment.User, "Преподаватель") ? "Преподаватель" : "Студент")</em>)
+        <p class="mt-1">@comment.Content</p>
+
+        <!-- Форма ответа -->
+        <form asp-controller="Comment" asp-action="Add" method="post" class="mt-2">
+            <input type="hidden" name="lectureId" value="@Model.Id" />
+            <input type="hidden" name="parentCommentId" value="@comment.Id" />
+            <textarea name="content" class="form-control" placeholder="Ответить..." required></textarea>
+            <button type="submit" class="btn btn-sm btn-secondary mt-1">Ответить</button>
+        </form>
+
+        <!-- Ответы -->
+        @if (comment.Replies != null)
+        {
+            foreach (var reply in comment.Replies.OrderBy(r => r.CreatedAt))
+            {
+                <div class="ms-4 mt-3 border-start ps-3">
+                    <strong>@reply.User.FullName</strong>
+                    (<em>@(await UserManager.IsInRoleAsync(reply.User, "Преподаватель") ? "Преподаватель" : "Студент")</em>)
+                    <p class="mt-1">@reply.Content</p>
+                </div>
+            }
+        }
+    </div>
+}
 
 @section Scripts {
     <script>

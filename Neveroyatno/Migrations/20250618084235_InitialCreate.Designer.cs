@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Neveroyatno.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Neveroyatno.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250618084235_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -251,42 +254,6 @@ namespace Neveroyatno.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Neveroyatno.Models.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("LectureId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("ParentCommentId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LectureId");
-
-                    b.HasIndex("ParentCommentId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Comments");
-                });
-
             modelBuilder.Entity("Neveroyatno.Models.Lecture", b =>
                 {
                     b.Property<int>("Id")
@@ -390,6 +357,12 @@ namespace Neveroyatno.Migrations
                     b.Property<string>("CertificateFileName")
                         .HasColumnType("text");
 
+                    b.Property<string>("ExamTitle")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsExam")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTime>("PassedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -478,32 +451,6 @@ namespace Neveroyatno.Migrations
                     b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("Neveroyatno.Models.Comment", b =>
-                {
-                    b.HasOne("Neveroyatno.Models.Lecture", "Lecture")
-                        .WithMany("Comments")
-                        .HasForeignKey("LectureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Neveroyatno.Models.Comment", "ParentComment")
-                        .WithMany("Replies")
-                        .HasForeignKey("ParentCommentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Neveroyatno.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Lecture");
-
-                    b.Navigation("ParentComment");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Neveroyatno.Models.Lecture", b =>
                 {
                     b.HasOne("Neveroyatno.Models.ApplicationUser", "Author")
@@ -563,15 +510,8 @@ namespace Neveroyatno.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Neveroyatno.Models.Comment", b =>
-                {
-                    b.Navigation("Replies");
-                });
-
             modelBuilder.Entity("Neveroyatno.Models.Lecture", b =>
                 {
-                    b.Navigation("Comments");
-
                     b.Navigation("Test");
                 });
 

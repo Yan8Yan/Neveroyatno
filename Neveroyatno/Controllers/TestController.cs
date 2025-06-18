@@ -4,6 +4,7 @@ using Neveroyatno.Data;
 using Neveroyatno.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using Neveroyatno.ViewModels;
 
 namespace Neveroyatno.Controllers
 {
@@ -80,7 +81,6 @@ namespace Neveroyatno.Controllers
             return View(test);
         }
 
-        // Обработка ответа
         [HttpPost]
         public async Task<IActionResult> SubmitTest(int testId, List<UserAnswerDto> userAnswers)
         {
@@ -107,8 +107,6 @@ namespace Neveroyatno.Controllers
                 switch (question.Type)
                 {
                     case QuestionType.OpenText:
-                        // Например, проверять на точное совпадение, либо оставить ручную проверку
-                        // Здесь просто считаем правильным, если есть ответ
                         if (!string.IsNullOrEmpty(userAnswer.OpenTextAnswer))
                             correctCount++;
                         break;
@@ -131,11 +129,36 @@ namespace Neveroyatno.Controllers
                 }
             }
 
+            // Получаем id текущего пользователя
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null)
+            {
+                // Пользователь не авторизован, можно перенаправить или вернуть ошибку
+                return Unauthorized();
+            }
+
+            // Сохраняем результат в БД
+            var testResult = new TestResult
+            {
+                TestId = testId,
+                UserId = userId,
+                Score = correctCount,
+                Total = totalQuestions,
+                Percentage = (int)((correctCount / (double)totalQuestions) * 100),
+                PassedAt = DateTime.UtcNow
+            };
+
+            _context.TestResults.Add(testResult);
+            await _context.SaveChangesAsync();
+
             ViewBag.Score = correctCount;
             ViewBag.TotalQuestions = totalQuestions;
+            ViewBag.Percentage = testResult.Percentage;
 
-            return View("Result", test);
+            return View("Result", testResult);
         }
+
 
     }
 }

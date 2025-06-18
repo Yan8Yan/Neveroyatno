@@ -15,6 +15,7 @@ namespace Neveroyatno.Data
         public DbSet<TaskItem> TaskItems { get; set; }  
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
+        public DbSet<TestResult> TestResults { get; set; }
 
 
         //здесь описаны связи таблиц (т.е один-к-одному и так далее)

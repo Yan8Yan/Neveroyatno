@@ -1,6 +1,44 @@
-﻿@model Neveroyatno.Models.ApplicationUser
+﻿@model Neveroyatno.ViewModels.UserProfileViewModel
 
-<h2>Профиль</h2>
+<h2>Профиль: @Model.UserName</h2>
+<p>Email: @Model.Email</p>
 
-<p><strong>Имя пользователя:</strong> @Model.UserName</p>
-<p><strong>Email:</strong> @Model.Email</p>
+<hr />
+<h4>Прогресс обучения</h4>
+<p>Пройдено тестов: @Model.CompletedTests из @Model.TotalTests</p>
+
+<div class="progress mb-4">
+    <div class="progress-bar" role="progressbar"
+         style="width: @(100 * Model.CompletedTests / (Model.TotalTests == 0 ? 1 : Model.TotalTests))%">
+        @(100 * Model.CompletedTests / (Model.TotalTests == 0 ? 1 : Model.TotalTests))%
+    </div>
+</div>
+
+@if (!Model.Results.Any())
+{
+    <p>Вы ещё не проходили тесты.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Лекция</th>
+                <th>Тест</th>
+                <th>Дата</th>
+                <th>Результат</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model.Results)
+            {
+                <tr>
+                    <td>@r.Test?.Lecture?.Title</td>
+                    <td>@r.Test?.Name</td>
+                    <td>@r.PassedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@r.Percentage %</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

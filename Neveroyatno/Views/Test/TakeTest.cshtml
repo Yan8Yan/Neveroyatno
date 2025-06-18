@@ -11,8 +11,10 @@
     @for (int i = 0; i < Model.Tasks.Count; i++)
     {
         var task = Model.Tasks.ElementAt(i);
+        <div class="question-wrapper">
         <div class="form-group">
-            <label>@task.Question.Text</label>
+            <label style="font-weight: bold; font-size: 18px;">@task.Question.Text</label>
+
 
             <input type="hidden" name="userAnswers[@i].TaskId" value="@task.Id" />
 
@@ -47,7 +49,18 @@
                 <input type="text" class="form-control" name="userAnswers[@i].OpenTextAnswer" />
             }
         </div>
+        </div>
     }
 
     <button type="submit" class="btn btn-primary">Отправить ответы</button>
 </form>
+
+@section Scripts {
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+}

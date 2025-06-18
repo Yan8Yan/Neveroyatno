@@ -29,11 +29,8 @@ namespace Neveroyatno.Controllers
 
             return View(viewModel);
         }
-
-        // Старт экзамена
         public async Task<IActionResult> Start()
         {
-            // Получаем все вопросы из всех тестов
             var allQuestions = await _context.TaskItems
                 .Include(t => t.Question)
                     .ThenInclude(q => q.Answers)
@@ -46,7 +43,7 @@ namespace Neveroyatno.Controllers
 
             var model = new ExamViewModel
             {
-                TestId = 0, // или Guid.NewGuid().ToString() если нужно
+                TestId = 0,
                 TestName = "Итоговый экзамен по всем лекциям",
                 Questions = allQuestions.Select(q => new QuestionViewModel
                 {
@@ -83,7 +80,6 @@ namespace Neveroyatno.Controllers
 
                 if (question.Type == QuestionType.OpenText)
                 {
-                    // Можно внедрить ручную проверку текста
                     continue;
                 }
 

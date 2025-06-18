@@ -1,0 +1,31 @@
+﻿@model List<Neveroyatno.Models.TestResult>
+
+<h2>Результаты экзаменов</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Студент</th>
+            <th>Тест</th>
+            <th>Лекция</th>
+            <th>Баллы</th>
+            <th>Всего</th>
+            <th>%</th>
+            <th>Дата сдачи</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var result in Model)
+        {
+            <tr>
+                <td>@result.User.UserName</td>
+                <td>@result.Test.Name</td>
+                <td>@result.Test.Lecture?.Title</td>
+                <td>@result.Score</td>
+                <td>@result.Total</td>
+                <td>@result.Percentage %</td>
+                <td>@result.PassedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>

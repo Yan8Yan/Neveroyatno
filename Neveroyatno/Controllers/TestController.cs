@@ -64,7 +64,7 @@ namespace Neveroyatno.Controllers
             }
         }
 
-        // Страница прохождения теста
+
         public IActionResult TakeTest(int testId)
         {
             var test = _context.Tests
@@ -129,16 +129,13 @@ namespace Neveroyatno.Controllers
                 }
             }
 
-            // Получаем id текущего пользователя
             var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
             if (userId == null)
             {
-                // Пользователь не авторизован, можно перенаправить или вернуть ошибку
                 return Unauthorized();
             }
 
-            // Сохраняем результат в БД
             var testResult = new TestResult
             {
                 TestId = testId,
